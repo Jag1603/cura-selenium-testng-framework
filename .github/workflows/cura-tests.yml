@@ -1,0 +1,77 @@
+name: CURA Selenium Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Run TestNG Selenium tests
+        run: mvn clean test -Dheadless=true
+
+      - name: Generate Allure report
+        if: always()
+        run: mvn allure:report -Dallure.results.directory=allure-results
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results/
+
+      - name: Upload Allure report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: target/site/allure-maven-plugin/
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: automation-logs
+          path: logs/
+
+      - name: Upload screenshots and test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            test-output/
+            target/surefire-reports/
+
+      - name: Create client package
+        if: always()
+        run: |
+          mkdir -p client-report
+          cp -r allure-results client-report/ 2>/dev/null || true
+          cp -r target/site/allure-maven-plugin client-report/allure-report 2>/dev/null || true
+          cp -r target/surefire-reports client-report/surefire-reports 2>/dev/null || true
+          cp -r logs client-report/logs 2>/dev/null || true
+          cd client-report
+          zip -r ../cura-client-report.zip .
+
+      - name: Upload client report package
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cura-client-report
+          path: cura-client-report.zip

@@ -1,0 +1,4 @@
+facility,readmission,program,visitDate,comment
+Tokyo CURA Healthcare Center,No,Medicare,30/09/2026,Regression appointment - Medicare
+Hongkong CURA Healthcare Center,Yes,Medicaid,01/10/2026,Regression appointment - Medicaid
+Seoul CURA Healthcare Center,No,None,02/10/2026,Regression appointment - None

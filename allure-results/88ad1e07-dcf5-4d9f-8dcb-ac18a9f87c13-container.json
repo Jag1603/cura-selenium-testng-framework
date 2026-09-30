@@ -1,0 +1,1 @@
+{"uuid":"88ad1e07-dcf5-4d9f-8dcb-ac18a9f87c13","name":"com.cura.base.BaseTest.setUp","children":["790a1839-2094-47f2-b240-7943b1cb3827"],"description":"","befores":[{"name":"setUp","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1790750044772,"stop":1790750048128}],"afters":[],"start":1790750044772,"stop":1790750048128}
